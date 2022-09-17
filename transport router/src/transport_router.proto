@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package transport_catalogue_serialize;
+
+message RoutingSettings {
+  int32 bus_wait_time = 1;
+  double bus_velocity = 2;
+}
+
+message Edge {
+  uint32 from = 1;
+  uint32 to = 2;
+  double weight = 3;
+}
+
+message IncidenceList {
+  repeated uint32 EdgeId = 1;
+}
+
+message BusRideInfo {
+  uint32 edge_id = 1;
+  uint32 bus_id = 2;
+  int32 span_count = 3;
+  double time = 4;
+};
+
+message WaitInfo {
+  uint32 EdgeId = 1;
+  uint32 stop_id = 2;
+  double time = 3;
+};
+
+message Graph {
+  repeated Edge edge = 1;
+  repeated IncidenceList incidence_list = 2;
+}
+
+message PrevEdge {
+  oneof prev_edge {
+    uint32 value = 1;
+    bool empty = 2;
+  }
+}
+
+message RouteInternalData {
+  double weight = 1;
+  PrevEdge prev_edge = 2;
+}
+
+message OptionalRouteInternalData {
+  oneof route_internal_data {
+    RouteInternalData value = 1;
+    bool empty = 2;
+  }
+}
+
+message VectorRouteInternalData {
+  repeated OptionalRouteInternalData internal_data = 1;
+}
+
+message Router {
+  repeated VectorRouteInternalData vector_route_internal_data = 1;
+}
+
+message VertexIds {
+  uint32 stop_id = 1;
+  uint32 in = 2;
+  uint32 out = 3;
+}
+
+message  TransportRouter {
+  Graph graph = 1;
+  Router router = 2;
+  uint32 vertexes_counter = 3;
+  repeated VertexIds vertexes = 4; //<stop_id, VertexIds>
+  repeated WaitInfo wait_edges = 5; //<EdgeId, WaitInfo>
+  repeated BusRideInfo bus_edges = 6; //<EdgeId, BusRideInfo>
+}

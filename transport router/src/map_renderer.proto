@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package transport_catalogue_serialize;
+
+message Coordinates {
+  double lat = 1; // Широта
+  double lng = 2; // Долгота
+};
+
+
+message Label {
+  int32 font_size = 1;
+  Coordinates offset = 2;
+}
+
+message ColorRGBA {
+  int32 r = 1;
+  int32 g = 2;
+  int32 b = 3;
+  double oppacity = 4;
+}
+
+message ColorRGB {
+  int32 r = 1;
+  int32 g = 2;
+  int32 b = 3;
+}
+
+message Color {
+  oneof color{
+    ColorRGB color_rgb = 1;
+    ColorRGBA color_rgba = 2;
+    string color_stirng = 3;
+  }
+}
+
+message RenderSettings {
+  double width = 1;
+  double height = 2;
+  double padding = 3;
+  double stop_radius = 4;
+  double line_width = 6;
+  Label bus_label = 7;
+  Label stop_label = 8;
+  Color underlayer_color = 9;
+  double underlayer_width = 10;
+  repeated Color color_palette = 11;
+}
